@@ -3,22 +3,25 @@
 Works with a chat model with tool calling support.
 """
 
+import os
 from datetime import UTC, datetime
 from typing import Dict, List, Literal, cast
 
 from langchain_core.messages import AIMessage
+from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph
 from langgraph.prebuilt import ToolNode
 
 from react_agent.configuration import Configuration
 from react_agent.state import InputState, State
 from react_agent.tools import TOOLS
-from react_agent.utils import load_chat_model
+
+from langchain_core.runnables import RunnableConfig
 
 # Define the function that calls the model
 
 
-async def call_model(state: State) -> Dict[str, List[AIMessage]]:
+async def call_model(state: State, config: RunnableConfig) -> Dict[str, List[AIMessage]]:
     """Call the LLM powering our "agent".
 
     This function prepares the prompt, initializes the model, and processes the response.
@@ -30,10 +33,17 @@ async def call_model(state: State) -> Dict[str, List[AIMessage]]:
     Returns:
         dict: A dictionary containing the model's response message.
     """
-    configuration = Configuration.from_context()
+    configuration = Configuration.from_runnable_config(config)
 
     # Initialize the model with tool binding. Change the model or add more tools here.
-    model = load_chat_model(configuration.model).bind_tools(TOOLS)
+    # ChatOpenAI 객체 생성 (OpenRouter 사용)
+    llm = ChatOpenAI(
+        temperature=0.1,
+        model="openai/gpt-4o",  # OpenRouter에서 제공하는 GPT-4o 모델
+        api_key=os.getenv("OPENROUTER_API_KEY"),  # OpenRouter API 키
+        base_url=os.getenv("OPENROUTER_BASE_URL"),  # OpenRouter API URL
+    )
+    model = llm.bind_tools(TOOLS)
 
     # Format the system prompt. Customize this to change the agent's behavior.
     system_message = configuration.system_prompt.format(

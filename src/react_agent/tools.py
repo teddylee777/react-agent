@@ -8,7 +8,7 @@ consider implementing more robust and specialized tools tailored to your needs.
 
 from typing import Any, Callable, List, Optional, cast
 
-from langchain_tavily import TavilySearch  # type: ignore[import-not-found]
+from langchain_tavily import TavilySearch
 
 from react_agent.configuration import Configuration
 

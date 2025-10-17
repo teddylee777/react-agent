@@ -1,21 +1,19 @@
 [project]
 name = "react-agent"
 version = "0.0.1"
-description = "Starter template for making a custom Reasoning and Action agent (using tool calling) in LangGraph."
+description = "LangGraph ReAct Agent Template"
 authors = [
-    { name = "William Fu-Hinthorn", email = "13333726+hinthornw@users.noreply.github.com" },
+    { name = "Teddy Lee", email = "teddylee777@gmail.com" },
 ]
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.11,<4.0"
 dependencies = [
-    "langgraph>=0.2.6",
-    "langchain-openai>=0.1.22",
-    "langchain-anthropic>=0.1.23",
-    "langchain>=0.2.14",
-    "langchain-fireworks>=0.1.7",
     "python-dotenv>=1.0.1",
-    "langchain-tavily>=0.1",
+    "langgraph>=0.6.10",
+    "langchain-openai>=0.3.35",
+    "langchain-tavily>=0.2.12",
+    "langchain>=0.3.27",
 ]
 
 

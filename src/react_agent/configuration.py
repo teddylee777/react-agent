@@ -1,13 +1,10 @@
 """Define the configurable parameters for the agent."""
-
 from __future__ import annotations
-
 from dataclasses import dataclass, field, fields
 from typing import Annotated
 
-from langchain_core.runnables import ensure_config
+from langchain_core.runnables import ensure_config, RunnableConfig
 from langgraph.config import get_config
-
 from react_agent import prompts
 
 
@@ -24,10 +21,10 @@ class Configuration:
     )
 
     model: Annotated[str, {"__template_metadata__": {"kind": "llm"}}] = field(
-        default="anthropic/claude-3-5-sonnet-20240620",
+        default="openai/gpt-4.1",
         metadata={
             "description": "The name of the language model to use for the agent's main interactions. "
-            "Should be in the form: provider/model-name."
+            "Should be in the form: provider/model-name. Currently using OpenRouter."
         },
     )
 
@@ -39,8 +36,16 @@ class Configuration:
     )
 
     @classmethod
-    def from_context(cls) -> Configuration:
+    def from_runnable_config(cls, config: RunnableConfig) -> Configuration:
         """Create a Configuration instance from a RunnableConfig object."""
+        config = ensure_config(config)
+        configurable = config.get("configurable") or {}
+        _fields = {f.name for f in fields(cls) if f.init}
+        return cls(**{k: v for k, v in configurable.items() if k in _fields})
+
+    @classmethod
+    def from_context(cls) -> Configuration:
+        """Create a Configuration instance from the current context."""
         try:
             config = get_config()
         except RuntimeError:
