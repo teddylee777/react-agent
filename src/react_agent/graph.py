@@ -39,9 +39,7 @@ async def call_model(state: State, config: RunnableConfig) -> Dict[str, List[AIM
     # ChatOpenAI 객체 생성 (OpenRouter 사용)
     llm = ChatOpenAI(
         temperature=0.1,
-        model="openai/gpt-4o",  # OpenRouter에서 제공하는 GPT-4o 모델
-        api_key=os.getenv("OPENROUTER_API_KEY"),  # OpenRouter API 키
-        base_url=os.getenv("OPENROUTER_BASE_URL"),  # OpenRouter API URL
+        model=configuration.model,
     )
     model = llm.bind_tools(TOOLS)
 
