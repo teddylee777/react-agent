@@ -1,10 +1,13 @@
 """Define the configurable parameters for the agent."""
+
 from __future__ import annotations
+
 from dataclasses import dataclass, field, fields
 from typing import Annotated
 
-from langchain_core.runnables import ensure_config, RunnableConfig
+from langchain_core.runnables import RunnableConfig, ensure_config
 from langgraph.config import get_config
+
 from react_agent import prompts
 
 
@@ -24,7 +27,6 @@ class Configuration:
         default="gpt-4.1",
         metadata={
             "description": "The name of the language model to use for the agent's main interactions. "
-            "Should be in the form: provider/model-name. Currently using OpenRouter."
         },
     )
 

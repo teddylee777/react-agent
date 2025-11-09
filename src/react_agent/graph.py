@@ -8,6 +8,7 @@ from datetime import UTC, datetime
 from typing import Dict, List, Literal, cast
 
 from langchain_core.messages import AIMessage
+from langchain_core.runnables import RunnableConfig
 from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph
 from langgraph.prebuilt import ToolNode
@@ -16,12 +17,12 @@ from react_agent.configuration import Configuration
 from react_agent.state import InputState, State
 from react_agent.tools import TOOLS
 
-from langchain_core.runnables import RunnableConfig
-
 # Define the function that calls the model
 
 
-async def call_model(state: State, config: RunnableConfig) -> Dict[str, List[AIMessage]]:
+async def call_model(
+    state: State, config: RunnableConfig
+) -> Dict[str, List[AIMessage]]:
     """Call the LLM powering our "agent".
 
     This function prepares the prompt, initializes the model, and processes the response.
@@ -36,7 +37,7 @@ async def call_model(state: State, config: RunnableConfig) -> Dict[str, List[AIM
     configuration = Configuration.from_runnable_config(config)
 
     # Initialize the model with tool binding. Change the model or add more tools here.
-    # ChatOpenAI 객체 생성 (OpenRouter 사용)
+    # ChatOpenAI 객체 생성
     llm = ChatOpenAI(
         temperature=0.1,
         model=configuration.model,
